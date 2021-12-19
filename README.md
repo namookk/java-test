@@ -29,3 +29,24 @@
 `assumingThat` 사용  
 `@EnabledOnOs`, `@EnabledOnJre`, `@EnabledIfEnvironmentVariable` 사용  
 
+### Tags 활용
+
+`@Tag` 를 활용하여 특정 태그가 있는 테스트케이스만 실행가능
+
+### Annotaion 만들어서 사용
+src/test/java/com/javatest/FastTest.java
+src/test/java/com/javatest/SlowTest.java
+
+처럼 만들 수 있다.
+
+### 반복 테스트 방법
+
+`@RepeatedTest`, `@ParameterizedTest` 사용
+
+### ParameterizedTest 사용시 인자값을 받는 법 
+
+`@ValueSource`, `@CsvSource` 사용
+
+인자값을 특정 객체로 받아오고 싶은 경우엔 `@ConvertWith`, `@AggregateWith` 사용 
+
+
