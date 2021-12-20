@@ -3,7 +3,9 @@ package com.javatest;
 import net.bytebuddy.implementation.bind.annotation.Empty;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.ParameterContext;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.AggregateWith;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
@@ -24,17 +26,22 @@ import static org.junit.jupiter.api.Assumptions.assumingThat;
 
 //DisplayNameGenerator.ReplaceUnderscores ( _ 를 공백 )
 //@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+//@ExtendWith(FindSlowTestExtension.class) // 선언적 등록방법
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class) // OrderAnnotaion 을 가지고 순서를 정함
 class StudyTest {
 
     int value = 1;
+
+    @RegisterExtension
+    static FindSlowTestExtension findSlowTestExtension =
+            new FindSlowTestExtension(1000L);
 
     @Order(2)
     @FastTest
 //    @DisplayName("스터디 만들기 fast")
 //    @EnabledOnOs({OS.MAC, OS.LINUX})
 //    @EnabledOnJre({JRE.JAVA_8, JRE.JAVA_9, JRE.JAVA_12})
-    //@EnabledIfEnvironmentVariable(named="TEST_ENV", matches = "namookk")
+//    @EnabledIfEnvironmentVariable(named="TEST_ENV", matches = "namookk")
     void create_new_study() {
         System.out.println(value++);
 //
@@ -80,11 +87,11 @@ class StudyTest {
 
     @Order(1)
     @SlowTest
-    @Disabled
     @DisplayName("스터디 다시 만들기 slow")
     //@Tag("slow")
     //@EnabledIfEnvironmentVariable(named="TEST_ENV", matches = "LOCAL")
-    void create_new_study_again() {
+    void create_new_study_again() throws InterruptedException {
+        Thread.sleep(1005L);
         System.out.println("create2 " + value++);
     }
 
