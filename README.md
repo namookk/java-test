@@ -49,4 +49,6 @@ src/test/java/com/javatest/SlowTest.java
 
 인자값을 특정 객체로 받아오고 싶은 경우엔 `@ConvertWith`, `@AggregateWith` 사용 
 
+### Test Instance 1개만 만드는 법
 
+`@TestInstance(TestInstance.Lifecycle.PER_CLASS)`

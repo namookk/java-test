@@ -23,15 +23,20 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.junit.jupiter.api.Assumptions.assumingThat;
 
 //DisplayNameGenerator.ReplaceUnderscores ( _ 를 공백 )
-@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+//@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class) // OrderAnnotaion 을 가지고 순서를 정함
 class StudyTest {
 
+    int value = 1;
+
+    @Order(2)
     @FastTest
-    @DisplayName("스터디 만들기 fast")
+//    @DisplayName("스터디 만들기 fast")
 //    @EnabledOnOs({OS.MAC, OS.LINUX})
 //    @EnabledOnJre({JRE.JAVA_8, JRE.JAVA_9, JRE.JAVA_12})
     //@EnabledIfEnvironmentVariable(named="TEST_ENV", matches = "namookk")
     void create_new_study() {
+        System.out.println(value++);
 //
 //        assumeTrue("LOCAL".equalsIgnoreCase(System.getenv("TEST_ENV")));
 //
@@ -39,11 +44,11 @@ class StudyTest {
 //            System.out.println("LOCAL");
 //        });
 
-        IllegalArgumentException exeption = assertThrows(IllegalArgumentException.class, () -> new Study(-10));
-        String message = exeption.getMessage();
+//        IllegalArgumentException exeption = assertThrows(IllegalArgumentException.class, () -> new Study(-10));
+//        String message = exeption.getMessage();
         Study study = new Study(10);
 
-        assertEquals(message, "limit은 0보다 커야함");
+//        assertEquals(message, "limit은 0보다 커야함");
 
         //assertj
 //        assertThat(study.getLimit()).isGreaterThan(0);
@@ -73,14 +78,17 @@ class StudyTest {
         System.out.println("create");
     }
 
+    @Order(1)
     @SlowTest
+    @Disabled
     @DisplayName("스터디 다시 만들기 slow")
     //@Tag("slow")
     //@EnabledIfEnvironmentVariable(named="TEST_ENV", matches = "LOCAL")
     void create_new_study_again() {
-        System.out.println("create2");
+        System.out.println("create2 " + value++);
     }
 
+    @Order(4)
     @DisplayName("스터디 만들기")
     @RepeatedTest(value = 10, name = "{displayName}, {currentRepetition} / {totalRepetitions} ")
     void create_study(RepetitionInfo info) {
@@ -112,6 +120,7 @@ class StudyTest {
 //        System.out.println(study);
 //    }
 
+    @Order(3)
     @DisplayName("스터디 만들기")
     @ParameterizedTest(name = "{index} {displayName} message={0}")
     @CsvSource({"10, '자바 스터디'", "20, 스프링"})
@@ -128,12 +137,12 @@ class StudyTest {
     }
 
     @BeforeAll
-    static void beforeAlll() {
+    void beforeAll() {
         System.out.println("before all");
     }
 
     @AfterAll
-    static void afterAll() {
+    void afterAll() {
         System.out.println("after all");
     }
 
