@@ -10,6 +10,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
 
@@ -19,16 +22,17 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 
+@SpringBootTest
 @ExtendWith(MockitoExtension.class) // Mock 어노테이션 사용시 있어야함
+@ActiveProfiles("test")
 class StudyServiceTest {
 
-//    @Mock MemberService memberService;
-//
-//    @Mock StudyRepository studyRepository;
+    @Mock MemberService memberService;
+    @Autowired StudyRepository studyRepository;
 
     @Test
     @Disabled
-    void createStudyService(@Mock MemberService memberService, @Mock StudyRepository studyRepository) {
+    void createStudyService() {
 //        MemberService memberService = mock(MemberService.class);
 //        StudyRepository studyRepository = mock(StudyRepository.class);
         StudyService studyService = new StudyService(memberService, studyRepository);
@@ -72,7 +76,7 @@ class StudyServiceTest {
 
     @Test
     @DisplayName("Mockito 테스트")
-    void stubExample(@Mock MemberService memberService, @Mock StudyRepository studyRepository) {
+    void stubExample() {
         Study study = new Study(10, "테스트");
         Member member = new Member();
         member.setId(1L);
