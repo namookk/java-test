@@ -21,6 +21,9 @@ dependencies {
 	annotationProcessor('org.projectlombok:lombok')
 	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.testcontainers:junit-jupiter:1.16.2'
+	testImplementation "org.testcontainers:postgresql:1.16.2"
+	testAnnotationProcessor('org.projectlombok:lombok')
 }
 
 test {

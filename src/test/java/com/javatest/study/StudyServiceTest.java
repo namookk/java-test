@@ -3,16 +3,24 @@ package com.javatest.study;
 import com.javatest.domain.Member;
 import com.javatest.domain.Study;
 import com.javatest.member.MemberService;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import lombok.extern.slf4j.Slf4j;
+import net.bytebuddy.description.type.TypeList;
+import org.junit.After;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.platform.commons.logging.Logger;
+import org.junit.platform.commons.logging.LoggerFactory;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.containers.output.Slf4jLogConsumer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.Optional;
 
@@ -25,10 +33,39 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 @ExtendWith(MockitoExtension.class) // Mock 어노테이션 사용시 있어야함
 @ActiveProfiles("test")
+@Testcontainers
+@Slf4j
 class StudyServiceTest {
 
     @Mock MemberService memberService;
     @Autowired StudyRepository studyRepository;
+
+    @Container
+    static PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer()
+            .withDatabaseName("studytest");
+
+//    @Container
+//    static GenericContainer postgreSQLContainer = new GenericContainer("postgres")
+//            .withExposedPorts(5432) // 도커 안의 포트
+//            .withEnv("POSTGRES_DB", "studytest");
+
+
+    @BeforeEach
+    void beforeEach(){
+        studyRepository.deleteAll();
+    }
+
+    @BeforeAll
+    static void beforeAll() {
+        //Slf4jLogConsumer logConsumer = new Slf4jLogConsumer(log);
+        //postgreSQLContainer.followOutput(logConsumer);
+        postgreSQLContainer.start();
+    }
+
+    @AfterAll
+    static void afterAll() {
+        postgreSQLContainer.stop();
+    }
 
     @Test
     @Disabled
